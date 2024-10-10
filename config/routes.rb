@@ -15,5 +15,5 @@ Rails.application.routes.draw do
   }
 
   # lead routes
-  resources :leads, only: [:index, :create, :show, :destroy]
+  resources :leads, only: [:index, :create, :show, :destroy, :update]
 end
