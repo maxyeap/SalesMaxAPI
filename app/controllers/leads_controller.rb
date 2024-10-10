@@ -1,5 +1,6 @@
 class LeadsController < ApplicationController
   before_action :set_lead, only: %i[ show update destroy ]
+  before_action :authenticate_user! # Ensure the user is logged in
 
   # GET /leads
   def index
@@ -15,7 +16,7 @@ class LeadsController < ApplicationController
 
   # POST /leads
   def create
-    @lead = Lead.new(lead_params)
+    @lead = current_user.leads.new(lead_params)
 
     if @lead.save
       render json: @lead, status: :created, location: @lead

@@ -1,5 +1,4 @@
 Rails.application.routes.draw do
-  resources :leads
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -14,4 +13,7 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
     registrations: 'users/registrations'
   }
+
+  # lead routes
+  resources :leads, only: [:create, :show]
 end
