@@ -5,9 +5,12 @@ class LeadsController < ApplicationController
 
   # GET /leads
   def index
-    @leads = current_user.leads
-
-    render json: @leads
+    begin
+      @leads = current_user.leads
+      render json: { success: true, data: @leads }, status: :ok
+    rescue => e
+      render json: { success: false, error: e.message }, status: :internal_server_error
+    end
   end
 
   # GET /leads/1
