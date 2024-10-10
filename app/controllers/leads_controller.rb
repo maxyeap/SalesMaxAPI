@@ -68,6 +68,6 @@ class LeadsController < ApplicationController
 
     # Ensure the lead belongs to the current user
     def ensure_current_user
-      render json: { error: 'Unauthorized' }, status: :unauthorized unless current_user.leads.include?(@lead)
+      render json: { status: false, error: 'Unauthorized' }, status: :unauthorized unless current_user.leads.include?(@lead)
     end
 end
