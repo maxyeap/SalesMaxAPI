@@ -39,9 +39,9 @@ class LeadsController < ApplicationController
   # PATCH/PUT /leads/1
   def update
     if @lead.update(lead_params)
-      render json: @lead
+      render json: { success: true, data: @lead }, status: :ok
     else
-      render json: @lead.errors, status: :unprocessable_entity
+      render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
