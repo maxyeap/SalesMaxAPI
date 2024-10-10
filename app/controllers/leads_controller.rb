@@ -15,14 +15,7 @@ class LeadsController < ApplicationController
 
   # GET /leads/1
   def show
-    begin
-      @lead = Lead.find(params[:id])
-      render json: { success: true, data: @lead }, status: :ok
-    rescue ActiveRecord::RecordNotFound => e
-      render json: { success: false, error: "Lead not found" }, status: :not_found
-    rescue => e
-      render json: { success: false, error: e.message }, status: :internal_server_error
-    end
+    render json: { success: true, data: @lead }, status: :ok
   end
 
   # POST /leads
@@ -47,12 +40,10 @@ class LeadsController < ApplicationController
 
   # DELETE /leads/1
   def destroy
-    @lead = Lead.find(params[:id])
-
     if @lead.destroy
       render json: { success: true, message: 'Lead deleted successfully' }, status: :ok
     else
-      render json: { success: false, error: 'Failed to delete lead' }, status: :unprocessable_entity
+      render json: { success: false, error: @lead.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -60,6 +51,9 @@ class LeadsController < ApplicationController
     # Use callbacks to share common setup or constraints between actions.
     def set_lead
       @lead = Lead.find(params[:id])
+
+    rescue ActiveRecord::RecordNotFound
+      render json: { success: false, error: 'Lead not found' }, status: :not_found
     end
 
     # Only allow a list of trusted parameters through.
