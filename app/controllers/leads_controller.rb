@@ -25,7 +25,7 @@ class LeadsController < ApplicationController
     if @lead.save
       render json: { success: true, data: @lead }, status: :created, location: @lead
     else
-      render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity
+      render json: { success: false, error: @lead.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
@@ -34,7 +34,7 @@ class LeadsController < ApplicationController
     if @lead.update(lead_params)
       render json: { success: true, data: @lead }, status: :ok
     else
-      render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity
+      render json: { success: false, error: @lead.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
