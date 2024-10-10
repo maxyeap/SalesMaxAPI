@@ -1,10 +1,11 @@
 class LeadsController < ApplicationController
   before_action :set_lead, only: %i[ show update destroy ]
   before_action :authenticate_user! # Ensure the user is logged in
+  before_action :ensure_current_user, only: %i[ show update destroy ] # Ensure the lead belongs to the current user
 
   # GET /leads
   def index
-    @leads = Lead.all
+    @leads = current_user.leads
 
     render json: @leads
   end
@@ -48,5 +49,10 @@ class LeadsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def lead_params
       params.require(:lead).permit(:first_name, :last_name, :phone, :email, :time_zone, :city, :country)
+    end
+
+    # Ensure the lead belongs to the current user
+    def ensure_current_user
+      render json: { error: 'Unauthorized' }, status: :unauthorized unless current_user.leads.include?(@lead)
     end
 end
