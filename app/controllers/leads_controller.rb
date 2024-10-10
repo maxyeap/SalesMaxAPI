@@ -47,11 +47,12 @@ class LeadsController < ApplicationController
 
   # DELETE /leads/1
   def destroy
-    @lead = Lead.find(params[:id])  # Make sure to find the lead by ID
+    @lead = Lead.find(params[:id])
+
     if @lead.destroy
-      render json: { message: 'Lead deleted successfully' }, status: :ok
+      render json: { success: true, message: 'Lead deleted successfully' }, status: :ok
     else
-      render json: { error: 'Failed to delete lead' }, status: :unprocessable_entity
+      render json: { success: false, error: 'Failed to delete lead' }, status: :unprocessable_entity
     end
   end
 
