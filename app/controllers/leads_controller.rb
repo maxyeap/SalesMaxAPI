@@ -30,9 +30,9 @@ class LeadsController < ApplicationController
     @lead = current_user.leads.new(lead_params)
 
     if @lead.save
-      render json: @lead, status: :created, location: @lead
+      render json: { success: true, data: @lead }, status: :created, location: @lead
     else
-      render json: @lead.errors, status: :unprocessable_entity
+      render json: { success: false, errors: @lead.errors.full_messages }, status: :unprocessable_entity
     end
   end
 
