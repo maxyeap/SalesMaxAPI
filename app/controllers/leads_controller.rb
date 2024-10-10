@@ -15,7 +15,14 @@ class LeadsController < ApplicationController
 
   # GET /leads/1
   def show
-    render json: @lead
+    begin
+      @lead = Lead.find(params[:id])
+      render json: { success: true, data: @lead }, status: :ok
+    rescue ActiveRecord::RecordNotFound => e
+      render json: { success: false, error: "Lead not found" }, status: :not_found
+    rescue => e
+      render json: { success: false, error: e.message }, status: :internal_server_error
+    end
   end
 
   # POST /leads
