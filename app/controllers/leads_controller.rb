@@ -6,8 +6,8 @@ class LeadsController < ApplicationController
   # GET /leads
   def index
     begin
-      @leads = current_user.leads
-      render json: { success: true, data: @leads }, status: :ok
+      @leads = current_user.leads.includes(deals: :activities) # Include deals and their activities
+      render json: { success: true, data: @leads.as_json(include: { deals: { include: :activities } }) }, status: :ok
     rescue => e
       render json: { success: false, error: e.message }, status: :internal_server_error
     end
@@ -15,7 +15,11 @@ class LeadsController < ApplicationController
 
   # GET /leads/1
   def show
-    render json: { success: true, data: @lead }, status: :ok
+    begin
+      render json: { success: true, data: @lead.as_json(include: { deals: { include: :activities } }) }, status: :ok
+    rescue => e
+      render json: { success: false, error: e.message }, status: :internal_server_error
+    end
   end
 
   # POST /leads
