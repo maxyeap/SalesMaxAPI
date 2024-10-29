@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_29_160618) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_29_190436) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -36,7 +36,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_29_160618) do
     t.string "stage", null: false
     t.date "close_date"
     t.integer "probability"
-    t.bigint "lead_id"
+    t.bigint "lead_id", null: false
     t.string "priority"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
