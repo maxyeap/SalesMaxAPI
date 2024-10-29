@@ -1,5 +1,7 @@
 class ActivitiesController < ApplicationController
   before_action :set_activity, only: %i[ show update destroy ]
+  before_action :authenticate_user! # Ensure the user is logged in
+  before_action :ensure_current_user, only: %i[ show update destroy ] # Ensure the activity belongs to the current user
 
   # GET /activities
   def index
@@ -49,6 +51,12 @@ class ActivitiesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def activity_params
-      params.fetch(:activity, {})
+      params.require(:activity).permit(:title, :description, :activity_type, :start_date, :end_date, :duration, :status, :deal_id)
+    end
+
+    def ensure_current_user
+      unless current_user.activities.include?(@activity)
+        render json: { success: false, message: 'You are not authorized to perform this action' }, status: :unauthorized
+      end
     end
 end
