@@ -6,7 +6,7 @@ class DealsController < ApplicationController
   # GET /deals
   def index
     begin
-      @deals = Deal.all
+      @deals = current_user.deals
       render json: { success: true, data: @deals }
     rescue => e
       render json: { success: false, message: e.message }, status: :unprocessable_entity
