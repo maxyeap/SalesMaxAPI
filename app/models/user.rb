@@ -5,4 +5,5 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable, :recoverable, :validatable, :jwt_authenticatable, jwt_revocation_strategy: self
   has_many :leads
   has_many :deals, through: :leads
+  has_many :activities, through: :deals
 end
