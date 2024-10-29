@@ -5,10 +5,12 @@ class DealsController < ApplicationController
 
   # GET /deals
   def index
-    @deals = Deal.all
-    render json: { success: true, data: @deals }
-  rescue => e
-    render json: { success: false, message: e.message }, status: :unprocessable_entity
+    begin
+      @deals = Deal.all
+      render json: { success: true, data: @deals }
+    rescue => e
+      render json: { success: false, message: e.message }, status: :unprocessable_entity
+    end
   end
 
   # GET /deals/1
