@@ -6,8 +6,8 @@ class DealsController < ApplicationController
   # GET /deals
   def index
     begin
-      @deals = current_user.deals
-      render json: { success: true, data: @deals }
+      @deals = current_user.deals.includes(:activities) # Eager load activities
+      render json: { success: true, data: @deals.as_json(include: :activities) }
     rescue => e
       render json: { success: false, message: e.message }, status: :unprocessable_entity
     end
@@ -15,10 +15,13 @@ class DealsController < ApplicationController
 
   # GET /deals/1
   def show
-    if @deal
-      render json: { success: true, data: @deal }
-    else
+    begin
+      @deal = current_user.deals.includes(:activities).find(params[:id]) # Eager load activities
+      render json: { success: true, data: @deal.as_json(include: :activities) }
+    rescue ActiveRecord::RecordNotFound
       render json: { success: false, message: 'Deal not found' }, status: :not_found
+    rescue => e
+      render json: { success: false, message: e.message }, status: :unprocessable_entity
     end
   end
 
