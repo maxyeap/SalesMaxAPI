@@ -15,7 +15,14 @@ Rails.application.routes.draw do
     registrations: 'users/registrations'
   }
 
-  # lead routes
-  resources :leads, only: [:index, :create, :show, :destroy, :update]
+  # # Standalone routes for leads
+  # resources :leads
+
+  # Standalone routes for deals
   resources :deals
+
+  # Nested route for deals within leads, only for index action
+  resources :leads do
+    resources :deals, only: [:index]
+  end
 end
