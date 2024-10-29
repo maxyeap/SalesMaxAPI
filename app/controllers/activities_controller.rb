@@ -3,9 +3,12 @@ class ActivitiesController < ApplicationController
 
   # GET /activities
   def index
-    @activities = Activity.all
-
-    render json: @activities
+    begin
+      @activities = current_user.activities
+      render json: { success: true, data: @activities }
+    rescue => e
+      render json: { success: false, message: e.message }, status: :unprocessable_entity
+    end
   end
 
   # GET /activities/1
