@@ -6,8 +6,28 @@ class ActivitiesController < ApplicationController
   # GET /activities
   def index
     begin
-      @activities = current_user.activities
-      render json: { success: true, data: @activities }
+      @activities = current_user.activities.includes(deal: :lead) # Eager load deals and leads
+      activities_with_details = @activities.map do |activity|
+        {
+          id: activity.id,
+          title: activity.title,
+          description: activity.description,
+          activity_type: activity.activity_type,
+          start_date: activity.start_date,
+          end_date: activity.end_date,
+          duration: activity.duration,
+          status: activity.status,
+          deal: {
+            id: activity.deal&.id,
+            title: activity.deal&.title
+          },
+          lead: {
+            id: activity.deal&.lead&.id,
+            name: activity.deal&.lead&.name
+          }
+        }
+      end
+      render json: { success: true, data: activities_with_details }
     rescue => e
       render json: { success: false, message: e.message }, status: :unprocessable_entity
     end
@@ -15,7 +35,32 @@ class ActivitiesController < ApplicationController
 
   # GET /activities/1
   def show
-    render json: @activity
+    begin
+      @activity = current_user.activities.includes(deal: :lead).find(params[:id]) # Eager load deal and lead
+      activity_details = {
+        id: @activity.id,
+        title: @activity.title,
+        description: @activity.description,
+        activity_type: @activity.activity_type,
+        start_date: @activity.start_date,
+        end_date: @activity.end_date,
+        duration: @activity.duration,
+        status: @activity.status,
+        deal: {
+          id: @activity.deal&.id,
+          title: @activity.deal&.title
+        },
+        lead: {
+          id: @activity.deal&.lead&.id,
+          name: @activity.deal&.lead&.name
+        }
+      }
+      render json: { success: true, data: activity_details }
+    rescue ActiveRecord::RecordNotFound
+      render json: { success: false, message: 'Activity not found' }, status: :not_found
+    rescue => e
+      render json: { success: false, message: e.message }, status: :unprocessable_entity
+    end
   end
 
   # POST /activities
