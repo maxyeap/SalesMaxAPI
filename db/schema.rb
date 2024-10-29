@@ -10,9 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_10_10_165301) do
+ActiveRecord::Schema[7.0].define(version: 2024_10_29_142614) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "deals", force: :cascade do |t|
+    t.string "title", null: false
+    t.decimal "amount", null: false
+    t.string "currency", null: false
+    t.string "status", null: false
+    t.string "stage", null: false
+    t.date "close_date"
+    t.integer "probability"
+    t.bigint "lead_id"
+    t.string "priority"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lead_id"], name: "index_deals_on_lead_id"
+  end
 
   create_table "leads", force: :cascade do |t|
     t.string "first_name"
@@ -43,5 +58,6 @@ ActiveRecord::Schema[7.0].define(version: 2024_10_10_165301) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "deals", "leads"
   add_foreign_key "leads", "users"
 end
