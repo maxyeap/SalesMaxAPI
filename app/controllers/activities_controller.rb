@@ -23,7 +23,7 @@ class ActivitiesController < ApplicationController
           },
           lead: {
             id: activity.deal&.lead&.id,
-            name: activity.deal&.lead&.name
+            name: activity.deal&.lead&.first_name + " " + activity.deal&.lead&.last_name
           }
         }
       end
@@ -52,7 +52,7 @@ class ActivitiesController < ApplicationController
         },
         lead: {
           id: @activity.deal&.lead&.id,
-          name: @activity.deal&.lead&.name
+          name: @activity.deal&.lead&.first_name + " " + @activity.deal&.lead&.last_name
         }
       }
       render json: { success: true, data: activity_details }
