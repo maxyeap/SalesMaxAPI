@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :activities
   resources :deals
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -25,4 +26,6 @@ Rails.application.routes.draw do
   resources :leads do
     resources :deals, only: [:index]
   end
+
+  resources :activities
 end
