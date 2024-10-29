@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :deals
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
@@ -16,4 +17,5 @@ Rails.application.routes.draw do
 
   # lead routes
   resources :leads, only: [:index, :create, :show, :destroy, :update]
+  resources :deals
 end
