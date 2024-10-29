@@ -1,5 +1,6 @@
 class DealsController < ApplicationController
   before_action :set_deal, only: %i[ show update destroy ]
+  before_action :authenticate_user! # Ensure the user is logged in
   before_action :ensure_current_user, only: %i[ show update destroy ] # Ensure the deal belongs to the current user
 
   # GET /deals
