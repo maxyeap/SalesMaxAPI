@@ -68,24 +68,28 @@ class ActivitiesController < ApplicationController
     @activity = Activity.new(activity_params)
 
     if @activity.save
-      render json: @activity, status: :created, location: @activity
+      render json: { success: true, activity: @activity }, status: :created, location: @activity
     else
-      render json: @activity.errors, status: :unprocessable_entity
+      render json: { success: false, errors: @activity.errors }, status: :unprocessable_entity
     end
   end
 
   # PATCH/PUT /activities/1
   def update
     if @activity.update(activity_params)
-      render json: @activity
+      render json: { success: true, activity: @activity }
     else
-      render json: @activity.errors, status: :unprocessable_entity
+      render json: { success: false, errors: @activity.errors }, status: :unprocessable_entity
     end
   end
 
   # DELETE /activities/1
   def destroy
-    @activity.destroy
+    if @activity.destroy
+      render json: { success: true, message: 'Activity deleted successfully' }
+    else
+      render json: { success: false, message: 'Failed to delete activity' }, status: :unprocessable_entity
+    end
   end
 
   private
